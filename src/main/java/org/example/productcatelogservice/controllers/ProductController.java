@@ -1,5 +1,6 @@
 package org.example.productcatelogservice.controllers;
 
+import org.example.productcatelogservice.dtos.CategoryDto;
 import org.example.productcatelogservice.dtos.ProductDto;
 import org.example.productcatelogservice.models.Category;
 import org.example.productcatelogservice.models.Product;
@@ -30,11 +31,9 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public Product getProductByID(@PathVariable Long id) {
-        Product product = new Product();
-        product.setId(id);
-        product.setName("iPhone");
-        return product;
+    public ProductDto getProductByID(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        return from(product);
     }
 
     @GetMapping("/products/{catId}/{prodId}")
@@ -57,4 +56,23 @@ public class ProductController {
     }
 
     // add PUT / PATCH / DELETE
+
+    private ProductDto from(Product product) {
+        if (product == null) {
+            return null;
+        }
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setDescription(product.getDescription());
+        productDto.setPrice(product.getPrice());
+        if (product.getCategory() != null) {
+            CategoryDto categoryDto = new CategoryDto();
+            categoryDto.setId(product.getCategory().getId());
+            categoryDto.setName(product.getCategory().getName());
+            categoryDto.setDescription(product.getCategory().getDescription());
+            productDto.setCategory(categoryDto);
+        }
+        return productDto;
+    }
 }
