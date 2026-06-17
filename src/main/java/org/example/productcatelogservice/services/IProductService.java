@@ -10,4 +10,7 @@ public interface IProductService {
     Product getProductById(Long productID);
     List<Product> getAllProducts();
     Product createProduct(Product input);
+    Product replaceProduct(Long productID, Product input);
+    Product updateProduct(Long productID, Product input);
+    Product deleteProduct(Long productID);
 }
